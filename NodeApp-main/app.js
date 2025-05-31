@@ -1,4 +1,3 @@
-
 const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');
@@ -28,15 +27,12 @@ app.use((req, res, next) => {
     next();
 });
 
-// --- Conexão com MongoDB ---
-const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/meuApp';
+// --- Conexão com MongoDB Atlas diretamente ---
+const mongoUri = 'mongodb+srv://georgeemannuelcarvalho:8vXBr6GTVLKpf0Ke@nodeapp.ycdrwgi.mongodb.net/?retryWrites=true&w=majority&appName=NodeApp';
 
-mongoose.connect(mongoUri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('Conectado ao MongoDB'))
-.catch(err => console.error('Erro ao conectar MongoDB:', err));
+mongoose.connect(mongoUri)
+    .then(() => console.log('Conectado ao MongoDB Atlas'))
+    .catch(err => console.error('Erro ao conectar MongoDB Atlas:', err));
 
 // --- Schemas e Models ---
 const usuarioSchema = new mongoose.Schema({
@@ -55,7 +51,6 @@ const Usuario = mongoose.model('Usuario', usuarioSchema);
 const Dispositivo = mongoose.model('Dispositivo', dispositivoSchema);
 
 // --- Rotas ---
-
 app.get('/', (req, res) => {
     res.render('login');
 });
@@ -188,9 +183,8 @@ app.post('/excluir_conta', async (req, res) => {
     });
 });
 
-// --- Correção fundamental: process.env.PORT ---
+// --- Porta ---
 const port = process.env.PORT || 3000;
-
 app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
 });
